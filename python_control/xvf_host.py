@@ -101,7 +101,7 @@ PARAMETERS = {
 
 
     # GPO_SERVICER_RESID commands 
-    "GPO_READ_VALUES": (20, 0, 5, "ro", "uint8", "Get current logic level of all GPO pins, in order of Pin X0D11, X0D30, X0D31, X0D33 and X0D39."),
+    "GPO_READ_VALUES": (20, 0, 6, "ro", "uint8", "Get current logic level of all GPO pins, in order of Pin X0D11, X0D30, X0D31, X0D32, X0D33 and X0D39."),
     "GPO_WRITE_VALUE": (20, 1, 2, "wo", "uint8", "Set current logic level of selected GPO pin. Supports Pin X0D11, X0D30, X0D31, X0D33 and X0D39."),
     "GPO_PORT_PIN_INDEX": (20, 2, 2, "rw", "uint32", "GPO port index and pin index that the following commands would be directed to"),
     "GPO_PIN_VAL": (20, 3, 3, "wo", "uint8", "value to write to one pin of a GPO port. Payload specifies port_index, pin_index and value to write to the pin"),
