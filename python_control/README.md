@@ -69,6 +69,22 @@ python xvf_host.py LED_BRIGHTNESS --values 50
 python xvf_host.py AEC_MIC_ARRAY_GEO
 ```
 
+#### 7. Set AIC3104 headphone and line-out levels
+
+```bash
+# Set headphone level, valid range: 0-9
+python xvf_host.py AIC3104_HP_LEVEL --values 5
+
+# Set line-out level, valid range: 0-9
+python xvf_host.py AIC3104_LINEOUT_LEVEL --values 7
+```
+
+Omit `--values` to read the current level:
+
+```bash
+python xvf_host.py AIC3104_HP_LEVEL
+```
+
 ## Other Scripts in This Directory
 
 - `respeaker_get_doa.py` — Minimal example that polls the DOA angle (0–359°) and the speech-detected flag in a loop:

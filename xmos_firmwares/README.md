@@ -19,7 +19,13 @@ The six-channel USB firmware exposes the normal configured stereo outputs on cha
 
 ## Changelog
 
-### v1.0.3 (Current)
+### v1.0.4 (Current)
+
+#### Added
+
+- Added playback level control for the on-board AIC3104 audio codec. The new `AIC3104_HP_LEVEL` and `AIC3104_LINEOUT_LEVEL` commands set or get the headphone and line-out output levels independently. Valid range for both commands: [0 .. 9].
+
+### v1.0.3
 
 #### Fixed
 
