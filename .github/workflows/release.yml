@@ -1,0 +1,71 @@
+name: Release
+
+# Pushing a version tag (e.g. v1.0.4) creates the GitHub release:
+# title "reSpeaker Flex Firmware <tag>", all firmware binaries matching
+# the tag attached as assets, and the release notes taken from the
+# tag's changelog section in xmos_firmwares/README.md.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create GitHub release with firmware binaries
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TITLE="reSpeaker Flex Firmware ${TAG}"
+
+          # Firmware binaries for this version
+          mapfile -t FILES < <(find xmos_firmwares -type f -name "*_${TAG}.bin" | sort)
+          if [ "${#FILES[@]}" -eq 0 ]; then
+            echo "::error::No firmware binaries matching *_${TAG}.bin"
+            exit 1
+          fi
+          printf 'Attaching %d binaries:\n' "${#FILES[@]}"
+          printf '  %s\n' "${FILES[@]}"
+
+          # Extract this tag's changelog section (### <tag> ... up to the next ###)
+          awk -v tag="${TAG}" '
+            /^### / {
+              if (found) exit
+              h = $0; sub(/^### /, "", h)
+              if (index(h, tag) == 1 && (length(h) == length(tag) || substr(h, length(tag) + 1, 1) == " ")) found = 1
+              next
+            }
+            found { print }
+          ' xmos_firmwares/README.md > section.md
+
+          {
+            echo "## ${TITLE}"
+            echo
+            if grep -q '[^[:space:]]' section.md; then
+              cat section.md
+            else
+              echo "See \`xmos_firmwares/README.md\` for the changelog."
+            fi
+          } > release_notes.md
+
+          if gh release view "${TAG}" >/dev/null 2>&1; then
+            gh release edit "${TAG}" --title "${TITLE}" --notes-file release_notes.md
+            gh release upload "${TAG}" --clobber "${FILES[@]}"
+          else
+            gh release create "${TAG}" \
+              --title "${TITLE}" \
+              --notes-file release_notes.md \
+              --verify-tag \
+              "${FILES[@]}"
+          fi

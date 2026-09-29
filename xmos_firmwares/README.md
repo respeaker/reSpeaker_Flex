@@ -56,3 +56,7 @@ The six-channel USB firmware exposes the normal configured stereo outputs on cha
 - Added per-scenario control parameter profiles (`i2s_aitool_v1`, `i2s_smarthome_v2`, `usb_aitool_v1`, `usb_smarthome_v2`) so tuning values can be selected for different applications.
 - Added the `BOOT_VERSION`, `JUMP_TO_SAFEMODE`, and `JUMP_TO_APP` commands, and updated the bootloader to v3.
 - Updated the acoustic model (nlmodel) based on the Seeed Bazaar 4o5w speaker.
+
+## Releasing
+
+Pushing a version tag (`v*`) triggers the [release workflow](../.github/workflows/release.yml), which creates the GitHub release with all firmware binaries matching the tag attached and uses the tag's changelog section above as the release notes. To publish a new version: commit the binaries and the changelog entry, then tag and push, for example `git tag v1.0.5 && git push origin v1.0.5`.
